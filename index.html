@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Énigme de l'Ours</title>
+  <style>
+    /* Sky and ocean background */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(#87ceeb, #b3e5fc); /* Sky */
+      z-index: -3;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(#03a9f4, #0288d1); /* Ocean */
+      z-index: -3;
+      animation: wave 6s infinite ease-in-out;
+    }
+
+    @keyframes wave {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(10px);
+      }
+    }
+
+    h1 {
+      margin-top: 2rem;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .alert {
+      border: 3px solid red;
+      color: red;
+      padding: 1rem;
+      margin: 1rem auto;
+      width: fit-content;
+      font-weight: bold;
+      animation: clignote 1s infinite;
+      display: none;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes clignote {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(255, 0, 0, 0.2); }
+    }
+
+    .buttons {
+      margin: 2rem;
+      display: none;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      margin: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #80deea;
+    }
+
+    .result {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .image-area {
+      position: relative;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .iceberg {
+      width: 450px;
+      height: 120px;
+      background: #b2ebf2;
+      border-radius: 50% / 30%;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: background 1s ease;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .iceberg.cracked {
+      background: repeating-linear-gradient(
+        45deg,
+        #b2ebf2,
+        #b2ebf2 10px,
+        #ffffff 10px,
+        #ffffff 20px
+      );
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .flat-bear {
+      transform: scaleY(0.3);
+      transition: transform 1s ease;
+    }
+
+    .image-area img {
+      max-width: 150px;
+      margin-top: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .island {
+      width: 300px;
+      height: 100px;
+      background: #81c784;
+      border-radius: 20px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    .water {
+      background: rgba(0, 0, 255, 0.5);
+      height: 150px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Énigme : L'ours et la glace</h1>
+
+  <div class="image-area" id="image-area">
+    <img src="download.png" alt="Ours sur iceberg" id="bear-img">
+    <div class="iceberg" id="iceberg"></div>
+    <div class="water" id="water"></div>
+    <div class="island" id="island"></div>
+  </div>
+
+  <div class="alert" id="alert">⚠️ L'ours est trop lourd, la glace risque de se briser !</div>
+
+  <div class="buttons" id="buttons">
+    <button onclick="choose('tapis')">Transformer l'ours en tapis</button>
+    <button onclick="choose('normal')">Garder sa forme normale</button>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("alert").style.display = "block";
+      document.getElementById("buttons").style.display = "block";
+      document.getElementById("iceberg").classList.add("cracked");
+    }, 3000);
+
+    function choose(option) {
+      const result = document.getElementById("result");
+      const imageArea = document.getElementById("image-area");
+
+      if (option === "tapis") {
+        result.textContent = "Bonne décision ! L'ours répartit son poids, la pression diminue et il traverse sans danger.";
+        imageArea.innerHTML = `
+          <img src="download.png" alt="Ours aplati" class="flat-bear">
+          <div class="iceberg"></div>
+          <div class="island" id="island" style="display: block;"></div>
+        `;
+      } else {
+        result.textContent = "Mauvais choix ! La pression reste forte, la glace se casse et l'ours tombe !";
+        imageArea.innerHTML = `
+          <img src="download.png" alt="Ours sur la glace avec fissure">
+          <div class="iceberg cracked"></div>
+          <div class="water"></div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
